@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ui.settings.SettingsActivity">
+
+    <!-- Barra superior com botão de voltar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="Configurações"
+        app:navigationIcon="@drawable/baseline_back_30" />
+
+    <!-- Ícone de Perfil -->
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/baseline_profile_24"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Texto para alterar imagem -->
+    <TextView
+        android:id="@+id/change_image_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alterar Imagem"
+        android:textSize="16sp"
+        android:textColor="?attr/colorPrimary"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/profile_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Texto para alterar descrição -->
+    <TextView
+        android:id="@+id/change_description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alterar Descrição"
+        android:textSize="16sp"
+        android:textColor="?attr/colorPrimary"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/change_image_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Botão: Alterar Dados da Conta -->
+    <Button
+        android:id="@+id/btn_change_account_data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Alterar Dados da Conta"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/change_description_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Botão: Notificações -->
+    <Button
+        android:id="@+id/btn_notifications"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Notificações"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_change_account_data"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Botão: Sair da conta -->
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sair da conta"
+        android:layout_marginTop="184dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_notifications"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

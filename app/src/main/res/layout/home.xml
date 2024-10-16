@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="ExtraText">
+    tools:context="com.example.myflickscreens.ui.home.HomeActivity">
+
+    <!-- Menu Superior -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/top_app_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Logo -->
+        <TextView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logo"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="16dp"/>
+
+        <!-- TopReviews -->
+        <TextView
+            android:id="@+id/top_reviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TopReviews"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="16dp" />
+
+        <!-- Discussões -->
+        <TextView
+            android:id="@+id/discussions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Discussões"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="16dp" />
+
+        <!-- Ícones de Notificação e Chat -->
+        <ImageView
+            android:id="@+id/notification_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_notification_27"
+            android:contentDescription="Notificações"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp" />
+
+        <ImageView
+            android:id="@+id/chat_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_chat_27"
+            android:contentDescription="Chat"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Carrossel de Filmes (RecyclerView para cada seção) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/carousel_latest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/top_app_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_movie" />
+
+    <TextView
+        android:id="@+id/recommendations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recomendações"
+        app:layout_constraintTop_toBottomOf="@id/carousel_latest"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:paddingStart="16dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/carousel_recommendations"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/recommendations"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_movie" />
+
+    <TextView
+        android:id="@+id/friends_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Atividade dos Amigos"
+        app:layout_constraintTop_toBottomOf="@id/carousel_recommendations"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:paddingStart="16dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/carousel_friends_activity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/friends_activity"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_movie" />
+
+    <!-- Menu Inferior -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:menu="@menu/menu_bar"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
