@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myflickscreens.R
 import com.example.myflickscreens.databinding.FragmentHomeBinding
 import com.example.myflickscreens.ui.movie.Movie
+import com.example.myflickscreens.ui.movie.MovieAllDetails
 import com.example.myflickscreens.ui.movie.MovieCarouselAdapter
 import com.example.myflickscreens.ui.movie.MovieDetails
 import com.example.myflickscreens.ui.topics.DiscussionsFragment
@@ -97,7 +98,7 @@ class HomeFragment : Fragment(), MovieCarouselAdapter.OnItemClickListener {
 
     override fun onItemClick(movie: Movie) {
         // Navegar para MovieDetailActivity
-        val intent = Intent(requireContext(), MovieDetails::class.java).apply {
+        val intent = Intent(requireContext(), MovieAllDetails::class.java).apply {
             putExtra("MOVIE_TITLE", movie.title)
             putExtra("MOVIE_IMAGE_RES_ID", movie.imageResId)
         }

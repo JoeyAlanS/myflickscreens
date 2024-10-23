@@ -17,6 +17,9 @@
         android:theme="@style/Theme.MyFlickScreens"
         tools:targetApi="31">
         <activity
+            android:name=".ui.movie.MovieAllDetails"
+            android:exported="false" />
+        <activity
             android:name=".ui.home.MainNotifications"
             android:exported="false" />
         <activity
