@@ -1,12 +1,15 @@
 package com.example.myflickscreens
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.myflickscreens.databinding.ActivityMainBinding
 import com.example.myflickscreens.ui.home.HomeFragment
+import com.example.myflickscreens.ui.login.SignUpActivity
 import com.example.myflickscreens.ui.search.SearchFragment
-import com.example.myflickscreens.ui.user.UserProfileFragment
+import com.example.myflickscreens.ui.user.UserProfileScreen
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_profile -> {
-                    loadFragment(UserProfileFragment())
+                    loadFragment(UserProfileScreen())
                     true
                 }
                 else -> false

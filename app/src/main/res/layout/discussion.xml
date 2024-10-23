@@ -31,15 +31,46 @@
     </androidx.appcompat.widget.Toolbar>
 
     <!-- Lista de Discussões -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/discussion_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="56dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
         app:layout_constraintTop_toBottomOf="@id/discussions_toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Título da Discussão -->
+        <TextView
+            android:id="@+id/discussion_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Título da Discussão"
+            android:textStyle="bold" />
+
+        <!-- Participantes e Botão Entrar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
+
+            <!-- Lista de Participantes -->
+            <TextView
+                android:id="@+id/discussion_participants"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Participantes: Maria, João, Pedro" />
+
+            <!-- Botão Entrar -->
+            <Button
+                android:id="@+id/enter_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Entrar" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

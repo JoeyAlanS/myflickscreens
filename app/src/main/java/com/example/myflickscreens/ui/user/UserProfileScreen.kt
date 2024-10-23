@@ -1,13 +1,16 @@
 package com.example.myflickscreens.ui.user
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myflickscreens.R
 import com.example.myflickscreens.ui.movie.Movie
 import com.example.myflickscreens.ui.movie.MovieCarouselAdapter
+import com.example.myflickscreens.ui.settings.SettingsActivity
 
 class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouselAdapter.OnItemClickListener {
 
@@ -23,6 +26,13 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
 
         recentlyWatchedCarousel = view.findViewById(R.id.recently_watched_carousel)
         setupCarousel(recentlyWatchedCarousel)
+
+        // Botão de configurações
+        val settingsButton: ImageButton = view.findViewById(R.id.settings_button)
+        settingsButton.setOnClickListener {
+            val intent = Intent(requireContext(), SettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupCarousel(recyclerView: RecyclerView) {

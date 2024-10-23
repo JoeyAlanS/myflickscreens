@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +27,8 @@ class HomeFragment : Fragment(), MovieCarouselAdapter.OnItemClickListener {
     // Referências para os TextViews clicáveis
     private lateinit var topReviews: TextView
     private lateinit var discussions: TextView
+    private lateinit var chatIcon: ImageView
+    private lateinit var  notificationIcon: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,23 +44,35 @@ class HomeFragment : Fragment(), MovieCarouselAdapter.OnItemClickListener {
         // Inicializar os TextViews
         topReviews = binding.topReviews
         discussions = binding.discussions
+        chatIcon = binding.chatIcon
+        notificationIcon = binding.notificationIcon
 
-//        // Configurar cliques nos TextViews
-//        topReviews.setOnClickListener {
-//            // Navegar para ReviewFragment
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, ReviewFragment())
-//                .addToBackStack(null)
-//                .commit()
-//        }
-//
-//        discussions.setOnClickListener {
-//            // Navegar para DiscussionsFragment
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, DiscussionsFragment())
-//                .addToBackStack(null)
-//                .commit()
-//        }
+        topReviews.setOnClickListener {
+            // Substitua o fragmento atual pelo ReviewFragment
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ReviewFragment())
+                .addToBackStack(null) // Permite que o botão de voltar funcione
+                .commit()
+        }
+
+        discussions.setOnClickListener {
+            // Substitua o fragmento atual pelo ReviewFragment
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ReviewFragment())
+                .addToBackStack(null) // Permite que o botão de voltar funcione
+                .commit()
+        }
+
+        chatIcon.setOnClickListener {
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            startActivity(intent)
+        }
+
+        notificationIcon.setOnClickListener {
+            val intent = Intent(requireContext(), MainNotifications::class.java)
+            startActivity(intent)
+        }
+
 
         // Configuração dos carrosseis
         setupCarousel(binding.carouselLatest)

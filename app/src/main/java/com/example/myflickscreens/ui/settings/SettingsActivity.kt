@@ -1,10 +1,14 @@
 package com.example.myflickscreens.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.myflickscreens.R
+import com.example.myflickscreens.ui.login.SignInActivity
+import com.example.myflickscreens.ui.settings.NotificationsActivity
+import com.example.myflickscreens.ui.settings.EditAccountDataActivity
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -21,20 +25,25 @@ class SettingsActivity : AppCompatActivity() {
 
         // Ação para o botão de voltar
         toolbar.setNavigationOnClickListener {
-            onBackPressed() // Volta para a tela anterior
+            finish() // Volta para a tela anterior (UserProfileScreen)
         }
 
         // Configurações de clique para os botões
         findViewById<Button>(R.id.btn_change_account_data).setOnClickListener {
-            // Ação para o botão Alterar Dados da Conta
+            val intent = Intent(this, EditAccountDataActivity::class.java)
+            startActivity(intent)
         }
 
         findViewById<Button>(R.id.btn_notifications).setOnClickListener {
-            // Ação para o botão Notificações
+            val intent = Intent(this, NotificationsActivity::class.java)
+            startActivity(intent)
         }
 
         findViewById<Button>(R.id.btn_logout).setOnClickListener {
-            // Ação para o botão Sair da Conta
+            val intent = Intent(this, SignInActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
         }
     }
 }

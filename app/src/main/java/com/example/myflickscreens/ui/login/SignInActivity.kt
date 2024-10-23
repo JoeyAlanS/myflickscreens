@@ -1,8 +1,10 @@
 package com.example.myflickscreens.ui.login
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myflickscreens.MainActivity
@@ -18,6 +20,7 @@ class SignInActivity : AppCompatActivity() {
         val emailEt = findViewById<TextInputEditText>(R.id.emailEt)
         val passwordEt = findViewById<TextInputEditText>(R.id.passET)
         val signInButton = findViewById<Button>(R.id.button)
+        val forgotPasswordTextView = findViewById<TextView>(R.id.textView2)
 
         signInButton.setOnClickListener {
             val email = emailEt.text.toString()
@@ -34,5 +37,16 @@ class SignInActivity : AppCompatActivity() {
                 Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show()
             }
         }
+        val signUpTextView = findViewById<TextView>(R.id.textView)
+        signUpTextView.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+        forgotPasswordTextView.setOnClickListener {
+            // Navega para a tela de recuperação de senha
+            val intent = Intent(this, RecoveryPasswordActivity::class.java)
+            startActivity(intent)
+        }
     }
+
 }

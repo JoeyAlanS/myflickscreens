@@ -21,6 +21,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        // Voltar à HomeFragment
         finish()
         return true
     }
