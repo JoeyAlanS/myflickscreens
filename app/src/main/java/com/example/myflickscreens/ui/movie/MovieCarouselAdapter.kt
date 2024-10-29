@@ -1,3 +1,4 @@
+// MovieCarouselAdapter.kt
 package com.example.myflickscreens.ui.movie
 
 import android.view.LayoutInflater
@@ -6,9 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myflickscreens.R
+import com.example.myflickscreens.utils.APIConstants
 
-class MovieCarouselAdapter(private val movieList: List<Movie>, private val listener: OnItemClickListener) :
+class MovieCarouselAdapter(private var movieList: List<Movie>, private val listener: OnItemClickListener) :
     RecyclerView.Adapter<MovieCarouselAdapter.MovieViewHolder>() {
 
     interface OnItemClickListener {
@@ -16,8 +19,15 @@ class MovieCarouselAdapter(private val movieList: List<Movie>, private val liste
     }
 
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val movieImage: ImageView = itemView.findViewById(R.id.movie_image)
+        private val movieTitle: TextView = itemView.findViewById(R.id.movie_title)
+
         fun bind(movie: Movie) {
-            // Bind the movie details to the item view
+            movieTitle.text = movie.title
+            Glide.with(itemView.context)
+                .load(APIConstants.IMAGE_PATH + movie.poster_path)
+                .into(movieImage)
+
             itemView.setOnClickListener {
                 listener.onItemClick(movie)
             }
@@ -34,4 +44,9 @@ class MovieCarouselAdapter(private val movieList: List<Movie>, private val liste
     }
 
     override fun getItemCount(): Int = movieList.size
+
+    fun updateMovies(newMovies: List<Movie>) {
+        movieList = newMovies
+        notifyDataSetChanged()
+    }
 }
