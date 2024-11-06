@@ -88,15 +88,17 @@
                     android:layout_height="24dp"
                     android:src="@drawable/baseline_like_23" />
 
-                <ImageView
-                    android:id="@+id/dislike_icon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/baseline_deslike_23" />
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/dislike_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_deslike_23" />
         </LinearLayout>
 
         <!-- Texto da Review -->
+
         <TextView
             android:id="@+id/review_rating"
             android:layout_width="wrap_content"

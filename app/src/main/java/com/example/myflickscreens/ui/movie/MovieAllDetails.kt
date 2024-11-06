@@ -28,27 +28,19 @@ class MovieAllDetails : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_all_details)
 
-        // Inicializa os componentes da UI
         movieTitle = findViewById(R.id.movie_title)
         movieRating = findViewById(R.id.movie_rating)
         movieSynopsis = findViewById(R.id.movie_synopsis)
         movieImage = findViewById(R.id.movie_image)
         addButton = findViewById(R.id.add_button)
 
-        // Pega o ID do filme a partir do Intent
         val movieId = intent.getIntExtra("MOVIE_ID", -1)
         fetchMovieDetails(movieId)
 
-        // Botão de Voltar para a Home
         val backButton: ImageButton = findViewById(R.id.back_button)
-        backButton.setOnClickListener {
-            finish() // Simula a volta para a tela anterior
-        }
+        backButton.setOnClickListener { finish() }
 
-        // Botão de Adicionar Nota (+)
-        addButton.setOnClickListener {
-            showRatingPopup()
-        }
+        addButton.setOnClickListener { showRatingPopup() }
     }
 
     private fun fetchMovieDetails(movieId: Int) {
@@ -62,25 +54,21 @@ class MovieAllDetails : AppCompatActivity() {
                 movieRating.text = "Nota: ${movieDetails.vote_average}"
                 movieSynopsis.text = movieDetails.overview
 
-                // Carregue a imagem usando Glide com o caminho correto do poster
                 movieDetails.poster_path?.let {
                     Glide.with(this@MovieAllDetails)
                         .load("https://image.tmdb.org/t/p/w500$it")
                         .into(movieImage)
-                } ?: run {
-                    // Aqui você pode definir uma imagem padrão se o poster não estiver disponível
-                    movieImage.setImageResource(R.drawable.no_image_placeholder) // Substitua pelo seu recurso padrão
-                }
+                } ?: movieImage.setImageResource(R.drawable.no_image_placeholder)
 
             } catch (e: HttpException) {
-                // Trate erros de HTTP
+                // Lida com erros de rede
             } catch (e: Exception) {
-                // Trate outros erros
+                // Lida com outros erros
             }
         }
     }
 
     private fun showRatingPopup() {
-        // (Seu código existente para o popup)
+        // Seu código para exibir o popup de classificação
     }
 }

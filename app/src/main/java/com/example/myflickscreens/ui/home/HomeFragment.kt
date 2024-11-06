@@ -17,6 +17,8 @@ import com.example.myflickscreens.ui.movie.Movie
 import com.example.myflickscreens.ui.movie.MovieAllDetails
 import com.example.myflickscreens.ui.movie.MovieCarouselAdapter
 import com.example.myflickscreens.ui.movie.MovieResponse
+import com.example.myflickscreens.ui.topics.DiscussionsFragment
+import com.example.myflickscreens.ui.topics.ReviewFragment
 import com.example.myflickscreens.utils.APIConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,25 +42,40 @@ class HomeFragment : Fragment(), MovieCarouselAdapter.OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         setupCarousels()
         fetchMovies()
+
+        binding.discussions.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, DiscussionsFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.topReviews.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ReviewFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun setupCarousels() {
         binding.carouselPopularMovies.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.carouselTopMovies.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        // Configure outros carrosséis conforme necessário
+
         binding.viewAllPopularMovies.setOnClickListener {
-            val intent = Intent(requireContext(), AllMoviesActivity::class.java).apply {
-                putExtra(AllMoviesActivity.EXTRA_MOVIE_TYPE, "popular")
-            }
-            startActivity(intent)
+            openAllMoviesActivity("popular", "Filmes Populares")
         }
 
         binding.viewAllTopMovies.setOnClickListener {
-            val intent = Intent(requireContext(), AllMoviesActivity::class.java).apply {
-                putExtra(AllMoviesActivity.EXTRA_MOVIE_TYPE, "top_rated")
-            }
-            startActivity(intent)
+            openAllMoviesActivity("top_rated", "Top Filmes")
         }
+    }
+    private fun openAllMoviesActivity(movieType: String, title: String) {
+        val intent = Intent(requireContext(), AllMoviesActivity::class.java).apply {
+            putExtra(AllMoviesActivity.EXTRA_MOVIE_TYPE, movieType)
+            putExtra(AllMoviesActivity.EXTRA_TITLE, title)
+        }
+        startActivity(intent)
     }
 
     private fun fetchMovies() {

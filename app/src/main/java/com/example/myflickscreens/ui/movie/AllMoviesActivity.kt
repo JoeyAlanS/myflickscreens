@@ -2,48 +2,75 @@ package com.example.myflickscreens.ui.movie
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myflickscreens.R
+import com.example.myflickscreens.api.RetrofitInstance
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 class AllMoviesActivity : AppCompatActivity() {
-    companion object {
-        const val EXTRA_MOVIE_TYPE: String = "movie_type"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_all_movies)
 
-        val featuredRecyclerView = findViewById<RecyclerView>(R.id.recycler_view_featured_movies)
+        val titleTextView = findViewById<TextView>(R.id.all_movies_title)
         val allMoviesRecyclerView = findViewById<RecyclerView>(R.id.recycler_view_all_movies)
+        val backButton = findViewById<ImageView>(R.id.back_button)
 
-        // Configura o layout manager
-        featuredRecyclerView.layoutManager = GridLayoutManager(this, 3) // 3 filmes por linha
-        allMoviesRecyclerView.layoutManager = LinearLayoutManager(this) // Lista vertical para todos os filmes
+        // Define o RecyclerView de todos os filmes com layout de grade de 3 colunas
+        allMoviesRecyclerView.layoutManager = GridLayoutManager(this, 3)
 
-        // Recebe o tipo de filme da Intent
         val movieType = intent.getStringExtra(EXTRA_MOVIE_TYPE)
-        val movies = getMoviesByType(movieType) // Método que você deve implementar
+        val title = intent.getStringExtra(EXTRA_TITLE) ?: "Filmes"
+        titleTextView.text = title
 
-        // Separa os filmes em destacados e restantes
-        val featuredMovies = movies.take(3) // Pega os primeiros 3 filmes
-        val allMovies = movies.drop(3) // Pega o restante
+        // Configura o clique no botão de voltar
+        backButton.setOnClickListener {
+            finish()
+        }
 
-        // Adapta os filmes
-        val featuredAdapter = MovieAdapter(featuredMovies)
-        val allMoviesAdapter = MovieAdapter(allMovies)
+        lifecycleScope.launch {
+            val movies = getMoviesByType(movieType)
 
-        featuredRecyclerView.adapter = featuredAdapter
-        allMoviesRecyclerView.adapter = allMoviesAdapter
+            // Callback para clique em filme
+            val onMovieClick: (Movie) -> Unit = { movie ->
+                val intent = Intent(this@AllMoviesActivity, MovieAllDetails::class.java)
+                intent.putExtra("MOVIE_ID", movie.id)
+                startActivity(intent)
+            }
+
+            allMoviesRecyclerView.adapter = MovieAdapter(movies, onMovieClick)
+        }
     }
 
-    private fun getMoviesByType(movieType: String?): List<Movie> {
-        // Aqui você deve implementar a lógica para buscar os filmes do tipo solicitado
-        val movieList: List<Movie> = ArrayList()
-        // Adicione filmes à lista de acordo com o tipo
-        return movieList // Retorne a lista populada
+    private suspend fun getMoviesByType(movieType: String?): List<Movie> {
+        return try {
+            val response = when (movieType) {
+                "popular" -> RetrofitInstance.api.getPopularMovies()
+                "top_rated" -> RetrofitInstance.api.getTopRatedMovies()
+                "now_playing" -> RetrofitInstance.api.getNowPlayingMovies()
+                else -> RetrofitInstance.api.getPopularMovies() // Default to popular movies
+            }
+            response.results
+        } catch (e: HttpException) {
+            // Lida com o erro HTTP
+            emptyList()
+        } catch (e: Exception) {
+            // Lida com outros erros
+            emptyList()
+        }
+    }
+
+    companion object {
+        const val EXTRA_MOVIE_TYPE = "movie_type"
+        const val EXTRA_TITLE = "title"
     }
 }
