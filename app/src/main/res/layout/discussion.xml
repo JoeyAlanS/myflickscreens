@@ -73,5 +73,17 @@
         </LinearLayout>
 
     </LinearLayout>
+    <!-- Botão para criar nova discussão -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_discussion_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_like_23"
+        android:contentDescription="Adicionar Discussão"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/cardview_light_background" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
