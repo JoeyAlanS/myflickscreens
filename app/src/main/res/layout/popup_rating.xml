@@ -18,11 +18,22 @@
 
     <!-- Botão "Assistir Mais Tarde" -->
     <Button
-        android:id="@+id/watch_later_button"
+        android:id="@+id/last_watch_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Assistir Mais Tarde"
+        android:text="Últimos assistidos"
         app:layout_constraintTop_toBottomOf="@id/rating_slider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Botão "Adicionar aos Favoritos" -->
+    <Button
+        android:id="@+id/favorite_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Adicionar aos favoritos"
+        app:layout_constraintTop_toBottomOf="@id/last_watch_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
@@ -33,7 +44,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Compartilhar"
-        app:layout_constraintTop_toBottomOf="@id/watch_later_button"
+        app:layout_constraintTop_toBottomOf="@id/favorite_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
