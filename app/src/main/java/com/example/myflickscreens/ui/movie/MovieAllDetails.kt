@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RatingBar
@@ -88,9 +89,29 @@ class MovieAllDetails : AppCompatActivity() {
 
         // Referências para os botões e RatingBar
         val ratingSlider: RatingBar = dialogView.findViewById(R.id.rating_slider)
+        val reviewEditText: EditText = dialogView.findViewById(R.id.review_edit_text)
+        val addReviewButton: Button = dialogView.findViewById(R.id.add_review_button)
         val lastWatchButton: Button = dialogView.findViewById(R.id.last_watch_button)
         val favoriteButton: Button = dialogView.findViewById(R.id.favorite_button)
         val shareButton: Button = dialogView.findViewById(R.id.share_button)
+
+        // Verifica se o usuário já tem uma review para este filme
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        fetchReview(userId, movieId, ratingSlider, reviewEditText)
+
+        // Ação para o botão "Adicionar Review"
+        addReviewButton.setOnClickListener {
+            val rating = ratingSlider.rating
+            val reviewText = reviewEditText.text.toString()
+
+            if (rating > 0 && reviewText.isNotEmpty()) {
+                saveReviewToFirestore(movieId, rating, reviewText)
+                showToast("Review salva com sucesso!")
+                dialog.dismiss()
+            } else {
+                showToast("Por favor, insira uma nota e uma review.")
+            }
+        }
 
         // Ação para o botão "Últimos assistidos"
         lastWatchButton.setOnClickListener {
@@ -116,6 +137,72 @@ class MovieAllDetails : AppCompatActivity() {
         dialog.show()
     }
 
+    private fun fetchReview(userId: String, movieId: Int, ratingSlider: RatingBar, reviewEditText: EditText) {
+        db.collection("users")
+            .document(userId)
+            .collection("reviews")
+            .whereEqualTo("movieId", movieId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {  // Verifica se há reviews
+                    val reviewDoc = querySnapshot.documents[0]
+                    val rating = reviewDoc.getDouble("rating")?.toFloat() ?: 0f
+                    val reviewText = reviewDoc.getString("reviewText") ?: ""
+
+                    // Preenche o RatingBar e o campo de texto
+                    ratingSlider.rating = rating
+                    reviewEditText.setText(reviewText)
+                }
+            }
+            .addOnFailureListener { e ->
+                showToast("Erro ao carregar review: ${e.message}")
+            }
+    }
+
+    private fun saveReviewToFirestore(movieId: Int, rating: Float, reviewText: String) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+
+        val review = hashMapOf(
+            "movieId" to movieId,
+            "reviewText" to reviewText,
+            "rating" to rating,
+            "timestamp" to System.currentTimeMillis()  // Marca o timestamp atual
+        )
+
+        // Salva ou atualiza a review na coleção "reviews" do Firestore
+        db.collection("users").document(userId).collection("reviews")
+            .whereEqualTo("movieId", movieId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (querySnapshot.isEmpty) {
+                    // Adiciona uma nova review
+                    db.collection("users").document(userId).collection("reviews")
+                        .add(review)
+                        .addOnSuccessListener {
+                            showToast("Review salva com sucesso!")
+                        }
+                        .addOnFailureListener { e ->
+                            showToast("Erro ao salvar a review: ${e.message}")
+                        }
+                } else {
+                    // Atualiza a review existente
+                    val reviewDoc = querySnapshot.documents[0]
+                    db.collection("users").document(userId).collection("reviews")
+                        .document(reviewDoc.id)
+                        .set(review)
+                        .addOnSuccessListener {
+                            showToast("Review atualizada com sucesso!")
+                        }
+                        .addOnFailureListener { e ->
+                            showToast("Erro ao atualizar a review: ${e.message}")
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                showToast("Erro ao salvar a review: ${e.message}")
+            }
+    }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -125,7 +212,7 @@ class MovieAllDetails : AppCompatActivity() {
         val movie = hashMapOf(
             "movieId" to movieId,
             "title" to movieTitle.text.toString(),
-            "posterPath" to "https://image.tmdb.org/t/p/w500" // Substitua com o URL real
+            "posterPath" to "https://image.tmdb.org/t/p/w500"
         )
 
         db.collection("users").document(userId).collection("favorites")

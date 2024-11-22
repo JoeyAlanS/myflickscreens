@@ -1,5 +1,6 @@
 package com.example.myflickscreens.ui.user
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -18,8 +19,7 @@ import com.example.myflickscreens.ui.movie.MovieCarouselAdapter
 import com.example.myflickscreens.ui.settings.SettingsActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import androidx.appcompat.app.AlertDialog
 
 class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouselAdapter.OnItemClickListener {
 
@@ -30,8 +30,6 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
     private lateinit var profileDescription: TextView
     private lateinit var settingsButton: ImageButton
     private lateinit var db: FirebaseFirestore
-    private lateinit var editProfileDescription: EditText
-    private lateinit var saveDescriptionButton: Button
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,8 +40,6 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
         profileImage = view.findViewById(R.id.profile_image) // Ícone de perfil
         profileName = view.findViewById(R.id.profile_name)
         profileDescription = view.findViewById(R.id.profile_description)
-        editProfileDescription = view.findViewById(R.id.edit_profile_description)
-        saveDescriptionButton = view.findViewById(R.id.save_description_button)
         settingsButton = view.findViewById(R.id.settings_button)
         db = FirebaseFirestore.getInstance()
 
@@ -63,19 +59,7 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
 
         // Configurar o clique na descrição para editar
         profileDescription.setOnClickListener {
-            profileDescription.visibility = View.GONE  // Esconde a descrição
-            editProfileDescription.visibility = View.VISIBLE  // Exibe o EditText
-            saveDescriptionButton.visibility = View.VISIBLE  // Exibe o botão de salvar
-        }
-
-        // Configurar o clique no botão de salvar descrição
-        saveDescriptionButton.setOnClickListener {
-            val newDescription = editProfileDescription.text.toString()
-            if (newDescription.length <= 100) {
-                updateDescription(newDescription)
-            } else {
-                Toast.makeText(requireContext(), "A descrição não pode ter mais de 100 caracteres", Toast.LENGTH_SHORT).show()
-            }
+            showEditDescriptionDialog()  // Exibe a caixa de diálogo para editar a descrição
         }
     }
 
@@ -112,9 +96,6 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
         userRef.update("description", newDescription)
             .addOnSuccessListener {
                 profileDescription.text = newDescription
-                profileDescription.visibility = View.VISIBLE
-                editProfileDescription.visibility = View.GONE
-                saveDescriptionButton.visibility = View.GONE
                 Toast.makeText(requireContext(), "Descrição atualizada com sucesso!", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
@@ -129,16 +110,12 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
         db.collection("users").document(userId).collection("favorites")
             .get()
             .addOnSuccessListener { documents ->
-                // Mapeando os filmes recebidos do Firebase para o modelo Movie
                 val movies = documents.map { doc -> doc.toObject(Movie::class.java) }
 
-                // Verifique se o adaptador é válido antes de chamar o método de atualização
                 val adapter = favoritesCarousel.adapter
                 if (adapter != null && adapter is MovieCarouselAdapter) {
-                    // Se o adaptador já estiver configurado, atualize a lista de filmes
                     adapter.updateMovies(movies)
                 } else {
-                    // Se o adaptador não estiver configurado, crie um novo
                     favoritesCarousel.adapter = MovieCarouselAdapter(movies, this)
                 }
             }
@@ -155,7 +132,7 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
             .get()
             .addOnSuccessListener { documents ->
                 val movies = documents.map { doc -> doc.toObject(Movie::class.java) }
-                // Verifique se o adaptador é válido antes de chamar o método de atualização
+
                 val adapter = recentlyWatchedCarousel.adapter
                 if (adapter != null && adapter is MovieCarouselAdapter) {
                     adapter.updateMovies(movies)
@@ -168,7 +145,41 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
             }
     }
 
+    // Função para exibir a caixa de diálogo de edição da descrição
+    private fun showEditDescriptionDialog() {
+        val userDescription = profileDescription.text.toString()
+
+        // Cria o EditText para editar a descrição
+        val editText = EditText(requireContext())
+        editText.setText(userDescription)
+        editText.setHint("Digite a nova descrição")
+        editText.setMaxLines(3)
+
+        // Configura o AlertDialog
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Editar Descrição")
+            .setView(editText)
+            .setPositiveButton("Salvar") { dialogInterface, _ ->
+                val newDescription = editText.text.toString()
+
+                if (newDescription.length <= 100) {
+                    updateDescription(newDescription)  // Atualiza a descrição no Firestore
+                } else {
+                    Toast.makeText(requireContext(), "A descrição não pode ter mais de 100 caracteres", Toast.LENGTH_SHORT).show()
+                }
+                dialogInterface.dismiss()
+            }
+            .setNegativeButton("Cancelar") { dialogInterface, _ ->
+                dialogInterface.dismiss()
+            }
+            .create()
+
+        dialog.show()
+    }
+
     override fun onItemClick(movie: Movie) {
-        // Aqui você pode implementar a navegação para uma tela de detalhes do filme
+//        val intent = Intent(requireContext(), UserReviewsScreen::class.java)
+//        intent.putExtra("movieId", movie.id.toString())  // Converte o Integer para String
+//        startActivity(intent)
     }
 }
