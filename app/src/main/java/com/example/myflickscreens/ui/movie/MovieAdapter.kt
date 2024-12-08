@@ -11,7 +11,7 @@ import com.example.myflickscreens.R
 
 class MovieAdapter(
     private val movies: List<Movie>,
-    private val onClick: (Movie) -> Unit // Callback para o clique
+    private val onClick: (Movie) -> Unit
 ) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -23,7 +23,7 @@ class MovieAdapter(
         val movie = movies[position]
         holder.bind(movie)
 
-        // Configura o clique para chamar o callback passando o filme
+
         holder.itemView.setOnClickListener { onClick(movie) }
     }
 

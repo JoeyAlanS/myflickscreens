@@ -21,34 +21,34 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Fragment padrão (HomeFragment)
         if (savedInstanceState == null) {
             binding.bottomNav.selectedItemId = R.id.nav_home
             loadFragment(HomeFragment())
         }
 
-        // Configuração da navegação inferior
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
                     loadFragment(HomeFragment())
                     true
                 }
+
                 R.id.nav_search -> {
                     loadFragment(SearchFragment())
                     true
                 }
+
                 R.id.nav_profile -> {
                     loadFragment(UserProfileScreen())
                     true
                 }
+
                 else -> false
             }
         }
     }
 
     private fun loadFragment(fragment: Fragment) {
-        // Evita recarregar o mesmo fragmento
         if (supportFragmentManager.findFragmentById(binding.fragmentContainer.id)?.javaClass == fragment.javaClass) {
             return
         }

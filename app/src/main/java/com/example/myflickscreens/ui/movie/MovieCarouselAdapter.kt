@@ -24,16 +24,14 @@ class MovieCarouselAdapter(private var movieList: List<Movie>, private val liste
         fun bind(movie: Movie) {
             movieTitle.text = movie.title
 
-            // Verifica se o poster_path não é nulo ou vazio antes de tentar carregar a imagem
             val posterUrl = movie.poster_path?.let {
-                APIConstants.IMAGE_PATH + it // Combina a URL base com o poster_path
+                APIConstants.IMAGE_PATH + it
             }
 
-            // Carregar a imagem do poster com Glide, ou uma imagem padrão caso o poster_url seja nulo
             Glide.with(itemView.context)
-                .load(posterUrl ?: R.drawable.no_image_placeholder)  // Usa uma imagem padrão caso a URL seja nula
-                .placeholder(R.drawable.no_image_placeholder)  // Placeholder enquanto a imagem carrega
-                .error(R.drawable.no_image_placeholder)  // Caso o carregamento da imagem falhe
+                .load(posterUrl ?: R.drawable.no_image_placeholder)
+                .placeholder(R.drawable.no_image_placeholder)
+                .error(R.drawable.no_image_placeholder)
                 .into(movieImage)
 
             itemView.setOnClickListener {
@@ -53,7 +51,7 @@ class MovieCarouselAdapter(private var movieList: List<Movie>, private val liste
 
     override fun getItemCount(): Int = movieList.size
 
-    // Função para atualizar a lista de filmes
+
     fun updateMovies(newMovies: List<Movie>) {
         movieList = newMovies
         notifyDataSetChanged()

@@ -6,11 +6,11 @@ data class Movie(
     val id: Int = 0,
     val title: String = "",
     val poster_path: String? = null
-){
-    // Função auxiliar para construir a URL completa do poster
+) {
+
     fun getPosterUrl(): String? {
         return poster_path?.let {
-            APIConstants.IMAGE_PATH + it   // Concatena a URL base com o caminho relativo
+            APIConstants.IMAGE_PATH + it
         }
     }
 }
@@ -26,7 +26,7 @@ data class MovieDetailsResponse(
     val vote_average: Double,
     val poster_path: String?,
     val overview: String,
-    val cast: List<Actor> // Supondo que você tenha uma data class para os atores
+    val cast: List<Actor>
 )
 
 data class Actor(

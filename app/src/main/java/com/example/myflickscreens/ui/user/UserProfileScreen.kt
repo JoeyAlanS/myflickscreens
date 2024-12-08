@@ -20,8 +20,10 @@ import com.example.myflickscreens.ui.settings.SettingsActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import androidx.appcompat.app.AlertDialog
+import com.example.myflickscreens.ui.movie.MovieAllDetails
 
-class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouselAdapter.OnItemClickListener {
+class UserProfileScreen : Fragment(R.layout.fragment_user_profile),
+    MovieCarouselAdapter.OnItemClickListener {
 
     private lateinit var favoritesCarousel: RecyclerView
     private lateinit var recentlyWatchedCarousel: RecyclerView
@@ -34,7 +36,6 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inicializando os componentes da UI
         favoritesCarousel = view.findViewById(R.id.favorites_carousel)
         recentlyWatchedCarousel = view.findViewById(R.id.recently_watched_carousel)
         profileImage = view.findViewById(R.id.profile_image) // Ícone de perfil
@@ -46,64 +47,71 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
         setupCarousel(favoritesCarousel)
         setupCarousel(recentlyWatchedCarousel)
 
-        // Carregar dados do Firebase
         fetchUserProfile()
         fetchFavorites()
         fetchRecentlyWatched()
 
-        // Configurar o botão de configurações
+
         settingsButton.setOnClickListener {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
             startActivity(intent)
         }
 
-        // Configurar o clique na descrição para editar
         profileDescription.setOnClickListener {
-            showEditDescriptionDialog()  // Exibe a caixa de diálogo para editar a descrição
+            showEditDescriptionDialog()
         }
     }
 
     private fun setupCarousel(recyclerView: RecyclerView) {
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
     }
 
-    // Função para buscar o perfil do usuário
     private fun fetchUserProfile() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-        // Buscar dados do usuário no Firestore
         db.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     val username = document.getString("username")
                     val description = document.getString("description")
-                    // Atualiza o nome e descrição do perfil
                     profileName.text = username ?: "Nome não disponível"
                     profileDescription.text = description ?: "Sem descrição"
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Erro ao carregar perfil: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Erro ao carregar perfil: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
-    // Função para atualizar a descrição do usuário no Firestore
+
     private fun updateDescription(newDescription: String) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-        // Atualizando a descrição no Firestore
+
         val userRef = db.collection("users").document(userId)
         userRef.update("description", newDescription)
             .addOnSuccessListener {
                 profileDescription.text = newDescription
-                Toast.makeText(requireContext(), "Descrição atualizada com sucesso!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Descrição atualizada com sucesso!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Erro ao atualizar descrição: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Erro ao atualizar descrição: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
-    // Função para buscar os filmes favoritos
     private fun fetchFavorites() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
@@ -120,11 +128,14 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Erro ao carregar favoritos: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Erro ao carregar favoritos: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
-    // Função para buscar os filmes assistidos recentemente
     private fun fetchRecentlyWatched() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
@@ -141,21 +152,22 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Erro ao carregar filmes assistidos: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Erro ao carregar filmes assistidos: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
-    // Função para exibir a caixa de diálogo de edição da descrição
     private fun showEditDescriptionDialog() {
         val userDescription = profileDescription.text.toString()
 
-        // Cria o EditText para editar a descrição
         val editText = EditText(requireContext())
         editText.setText(userDescription)
         editText.setHint("Digite a nova descrição")
         editText.setMaxLines(3)
 
-        // Configura o AlertDialog
         val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Editar Descrição")
             .setView(editText)
@@ -163,9 +175,13 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
                 val newDescription = editText.text.toString()
 
                 if (newDescription.length <= 100) {
-                    updateDescription(newDescription)  // Atualiza a descrição no Firestore
+                    updateDescription(newDescription)
                 } else {
-                    Toast.makeText(requireContext(), "A descrição não pode ter mais de 100 caracteres", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "A descrição não pode ter mais de 100 caracteres",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 dialogInterface.dismiss()
             }
@@ -178,8 +194,9 @@ class UserProfileScreen : Fragment(R.layout.fragment_user_profile), MovieCarouse
     }
 
     override fun onItemClick(movie: Movie) {
-//        val intent = Intent(requireContext(), UserReviewsScreen::class.java)
-//        intent.putExtra("movieId", movie.id.toString())  // Converte o Integer para String
-//        startActivity(intent)
+        val intent = Intent(requireContext(), MovieAllDetails::class.java)
+        intent.putExtra("MOVIE_ID", movie.id)
+        startActivity(intent)
+
     }
 }

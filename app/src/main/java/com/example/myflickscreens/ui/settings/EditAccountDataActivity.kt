@@ -21,28 +21,25 @@ class EditAccountDataActivity : AppCompatActivity() {
         binding = ActivityEditAccountDataBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inicializando FirebaseAuth e Firestore
         firebaseAuth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        // Obtendo o usuário atual
         currentUser = firebaseAuth.currentUser ?: run {
             Toast.makeText(this, "Usuário não autenticado!", Toast.LENGTH_SHORT).show()
-            finish() // Encerra a atividade se o usuário não estiver autenticado
+            finish()
             return
         }
 
-        // Carregar os dados do usuário atual
         loadUserData()
 
-        // Ao clicar no botão "Salvar", atualizar os dados
         binding.btnSave.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
             val confirmPassword = binding.etConfirmPassword.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
@@ -51,43 +48,48 @@ class EditAccountDataActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Atualizar o e-mail do usuário
             updateUserData(email, password)
         }
     }
 
     private fun loadUserData() {
-        // Preencher os campos com os dados atuais do usuário
         binding.etEmail.setText(currentUser.email)
     }
 
     private fun updateUserData(email: String, password: String) {
-        // Atualizar o email do usuário
         currentUser.updateEmail(email).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                // Se o e-mail foi atualizado com sucesso, também atualiza a senha
                 if (password.isNotEmpty()) {
                     currentUser.updatePassword(password).addOnCompleteListener { passwordTask ->
                         if (passwordTask.isSuccessful) {
-                            // Atualizar os dados no Firestore
                             val userRef = firestore.collection("users").document(currentUser.uid)
                             userRef.update(
                                 "email", email
                             ).addOnCompleteListener { firestoreTask ->
                                 if (firestoreTask.isSuccessful) {
-                                    Toast.makeText(this, "Dados atualizados com sucesso.", Toast.LENGTH_SHORT).show()
-                                    finish() // Voltar para a tela anterior
+                                    Toast.makeText(
+                                        this,
+                                        "Dados atualizados com sucesso.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    finish()
                                 } else {
-                                    Toast.makeText(this, "Erro ao atualizar dados no Firestore.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        this,
+                                        "Erro ao atualizar dados no Firestore.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
                         } else {
-                            Toast.makeText(this, "Erro ao atualizar a senha.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Erro ao atualizar a senha.", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
                 } else {
-                    Toast.makeText(this, "Dados atualizados com sucesso.", Toast.LENGTH_SHORT).show()
-                    finish() // Voltar para a tela anterior
+                    Toast.makeText(this, "Dados atualizados com sucesso.", Toast.LENGTH_SHORT)
+                        .show()
+                    finish()
                 }
             } else {
                 Toast.makeText(this, "Erro ao atualizar e-mail.", Toast.LENGTH_SHORT).show()

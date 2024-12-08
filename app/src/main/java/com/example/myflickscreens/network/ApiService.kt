@@ -12,33 +12,40 @@ interface ApiService {
 
     @GET(APIConstants.POPULAR_MOVIES)
     suspend fun getPopularMovies(
-        @Query("api_key") apiKey: String = APIConstants.API_KEY
+        @Query("api_key") apiKey: String = APIConstants.API_KEY,
+        @Query("language") language: String = "pt-BR"
     ): MovieResponse
 
     @GET("tv/popular")
     suspend fun getPopularSeries(
-        @Query("api_key") apiKey: String = APIConstants.API_KEY
+        @Query("api_key") apiKey: String = APIConstants.API_KEY,
+        @Query("language") language: String = "pt-BR"
     ): MovieResponse
 
     @GET("movie/top_rated")
     suspend fun getTopRatedMovies(
-        @Query("api_key") apiKey: String = APIConstants.API_KEY
+        @Query("api_key") apiKey: String = APIConstants.API_KEY,
+        @Query("language") language: String = "pt-BR"
     ): MovieResponse
 
     @GET("movie/now_playing")
     suspend fun getNowPlayingMovies(
         @Query("api_key") apiKey: String = APIConstants.API_KEY
+        ,@Query("language") language: String = "pt-BR"
     ): MovieResponse
 
     @GET("search/movie")
     suspend fun searchMovies(
         @Query("api_key") apiKey: String = APIConstants.API_KEY,
-        @Query("query") query: String
+        @Query("query") query: String,
+        @Query("language") language: String = "pt-BR"
     ): MovieResponse
 
     @GET("movie/{id}")
     suspend fun getMovieDetails(
         @Path("id") movieId: Int,
-        @Query("api_key") apiKey: String = APIConstants.API_KEY
+        @Query("api_key") apiKey: String = APIConstants.API_KEY,
+        @Query("language") language: String = "pt-BR"
     ): MovieDetailsResponse
+    
 }

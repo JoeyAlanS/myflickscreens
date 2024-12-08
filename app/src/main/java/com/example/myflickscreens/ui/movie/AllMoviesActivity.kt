@@ -25,14 +25,14 @@ class AllMoviesActivity : AppCompatActivity() {
         val allMoviesRecyclerView = findViewById<RecyclerView>(R.id.recycler_view_all_movies)
         val backButton = findViewById<ImageView>(R.id.back_button)
 
-        // Define o RecyclerView de todos os filmes com layout de grade de 3 colunas
+
         allMoviesRecyclerView.layoutManager = GridLayoutManager(this, 3)
 
         val movieType = intent.getStringExtra(EXTRA_MOVIE_TYPE)
         val title = intent.getStringExtra(EXTRA_TITLE) ?: "Filmes"
         titleTextView.text = title
 
-        // Configura o clique no botão de voltar
+
         backButton.setOnClickListener {
             finish()
         }
@@ -40,7 +40,7 @@ class AllMoviesActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val movies = getMoviesByType(movieType)
 
-            // Callback para clique em filme
+
             val onMovieClick: (Movie) -> Unit = { movie ->
                 val intent = Intent(this@AllMoviesActivity, MovieAllDetails::class.java)
                 intent.putExtra("MOVIE_ID", movie.id)
@@ -57,14 +57,14 @@ class AllMoviesActivity : AppCompatActivity() {
                 "popular" -> RetrofitInstance.api.getPopularMovies()
                 "top_rated" -> RetrofitInstance.api.getTopRatedMovies()
                 "now_playing" -> RetrofitInstance.api.getNowPlayingMovies()
-                else -> RetrofitInstance.api.getPopularMovies() // Default to popular movies
+                else -> RetrofitInstance.api.getPopularMovies()
             }
             response.results
         } catch (e: HttpException) {
-            // Lida com o erro HTTP
+
             emptyList()
         } catch (e: Exception) {
-            // Lida com outros erros
+
             emptyList()
         }
     }

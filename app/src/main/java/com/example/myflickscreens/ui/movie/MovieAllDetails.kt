@@ -43,7 +43,11 @@ class MovieAllDetails : AppCompatActivity() {
         addButton = findViewById(R.id.add_button)
 
         val movieId = intent.getIntExtra("MOVIE_ID", -1)
-        fetchMovieDetails(movieId)
+        if (movieId != null) {
+            fetchMovieDetails(movieId)
+        } else {
+            Toast.makeText(this, "ID do filme não encontrado", Toast.LENGTH_SHORT).show()
+        }
 
         val backButton: ImageButton = findViewById(R.id.back_button)
         backButton.setOnClickListener { finish() }
@@ -58,9 +62,10 @@ class MovieAllDetails : AppCompatActivity() {
                     RetrofitInstance.api.getMovieDetails(movieId)
                 }
 
-                movieTitle.text = movieDetails.title
-                movieRating.text = "Nota: ${movieDetails.vote_average}"
-                movieSynopsis.text = movieDetails.overview
+
+                movieTitle.text = movieDetails.title ?: "Título não disponível"
+                movieRating.text = "Nota: ${movieDetails.vote_average ?: "N/A"}"
+                movieSynopsis.text = movieDetails.overview ?: "Sinopse não disponível"
 
                 movieDetails.poster_path?.let {
                     Glide.with(this@MovieAllDetails)
@@ -69,25 +74,25 @@ class MovieAllDetails : AppCompatActivity() {
                 } ?: movieImage.setImageResource(R.drawable.no_image_placeholder)
 
             } catch (e: HttpException) {
-                // Lida com erros de rede
+                showToast("Erro de rede: ${e.message()}")
             } catch (e: Exception) {
-                // Lida com outros erros
+                showToast("Erro ao carregar os dados: ${e.message}")
             }
         }
     }
 
     private fun showRatingPopup(movieId: Int) {
-        // Infla o layout do pop-up
+
         val inflater = layoutInflater
         val dialogView = inflater.inflate(R.layout.popup_rating, null)
 
-        // Cria o AlertDialog
+
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
-            .setCancelable(true) // O diálogo pode ser cancelado tocando fora
+            .setCancelable(true)
             .create()
 
-        // Referências para os botões e RatingBar
+
         val ratingSlider: RatingBar = dialogView.findViewById(R.id.rating_slider)
         val reviewEditText: EditText = dialogView.findViewById(R.id.review_edit_text)
         val addReviewButton: Button = dialogView.findViewById(R.id.add_review_button)
@@ -95,11 +100,10 @@ class MovieAllDetails : AppCompatActivity() {
         val favoriteButton: Button = dialogView.findViewById(R.id.favorite_button)
         val shareButton: Button = dialogView.findViewById(R.id.share_button)
 
-        // Verifica se o usuário já tem uma review para este filme
+
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
         fetchReview(userId, movieId, ratingSlider, reviewEditText)
 
-        // Ação para o botão "Adicionar Review"
         addReviewButton.setOnClickListener {
             val rating = ratingSlider.rating
             val reviewText = reviewEditText.text.toString()
@@ -113,43 +117,46 @@ class MovieAllDetails : AppCompatActivity() {
             }
         }
 
-        // Ação para o botão "Últimos assistidos"
+
         lastWatchButton.setOnClickListener {
             addMovieToRecentlyWatched(movieId)
             showToast("Adicionado aos últimos assistidos")
             dialog.dismiss()
         }
 
-        // Ação para o botão "Adicionar aos favoritos"
         favoriteButton.setOnClickListener {
             addMovieToFavorites(movieId)
             showToast("Adicionado aos favoritos")
             dialog.dismiss()
         }
 
-        // Ação para o botão "Compartilhar"
+
         shareButton.setOnClickListener {
             shareMovie()
-            dialog.dismiss() // Fecha o pop-up
+            dialog.dismiss()
         }
 
-        // Exibe o pop-up
+
         dialog.show()
     }
 
-    private fun fetchReview(userId: String, movieId: Int, ratingSlider: RatingBar, reviewEditText: EditText) {
+    private fun fetchReview(
+        userId: String,
+        movieId: Int,
+        ratingSlider: RatingBar,
+        reviewEditText: EditText
+    ) {
         db.collection("users")
             .document(userId)
             .collection("reviews")
             .whereEqualTo("movieId", movieId)
             .get()
             .addOnSuccessListener { querySnapshot ->
-                if (!querySnapshot.isEmpty) {  // Verifica se há reviews
+                if (!querySnapshot.isEmpty) {
                     val reviewDoc = querySnapshot.documents[0]
                     val rating = reviewDoc.getDouble("rating")?.toFloat() ?: 0f
                     val reviewText = reviewDoc.getString("reviewText") ?: ""
 
-                    // Preenche o RatingBar e o campo de texto
                     ratingSlider.rating = rating
                     reviewEditText.setText(reviewText)
                 }
@@ -166,10 +173,9 @@ class MovieAllDetails : AppCompatActivity() {
             "movieId" to movieId,
             "reviewText" to reviewText,
             "rating" to rating,
-            "timestamp" to System.currentTimeMillis()  // Marca o timestamp atual
+            "timestamp" to System.currentTimeMillis()
         )
 
-        // Salva ou atualiza a review na coleção "reviews" do Firestore
         db.collection("users").document(userId).collection("reviews")
             .whereEqualTo("movieId", movieId)
             .get()
@@ -231,7 +237,7 @@ class MovieAllDetails : AppCompatActivity() {
         val movie = hashMapOf(
             "movieId" to movieId,
             "title" to movieTitle.text.toString(),
-            "posterPath" to "https://image.tmdb.org/t/p/w500" // Substitua com o URL real
+            "posterPath" to "https://image.tmdb.org/t/p/w500"
         )
 
         db.collection("users").document(userId).collection("recentlyWatched")
@@ -246,11 +252,23 @@ class MovieAllDetails : AppCompatActivity() {
     }
 
     private fun shareMovie() {
+        val movieId = intent.getIntExtra("MOVIE_ID", -1)
+        if (movieId == -1) {
+            showToast("ID do filme não encontrado")
+            return
+        }
+
+
+        val movieUrl = "https://www.themoviedb.org/movie/$movieId"
+
+        val shareText = "Confira este filme: $movieUrl"
+
         val shareIntent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, "Confira o filme!")
+            putExtra(Intent.EXTRA_TEXT, shareText)
             type = "text/plain"
         }
+
         startActivity(Intent.createChooser(shareIntent, "Compartilhar"))
     }
 }

@@ -1,5 +1,6 @@
 package com.example.myflickscreens.ui.login
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -48,7 +49,8 @@ class RecoveryPasswordActivity : AppCompatActivity() {
                     Toast.makeText(this, "E-mail de recuperação enviado", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
-                    Toast.makeText(this, "Erro: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Erro: ${task.exception?.message}", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
     }

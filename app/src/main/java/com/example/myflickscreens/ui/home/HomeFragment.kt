@@ -16,7 +16,6 @@ import com.example.myflickscreens.ui.movie.AllMoviesActivity
 import com.example.myflickscreens.ui.movie.Movie
 import com.example.myflickscreens.ui.movie.MovieAllDetails
 import com.example.myflickscreens.ui.movie.MovieCarouselAdapter
-import com.example.myflickscreens.ui.movie.MovieResponse
 import com.example.myflickscreens.ui.topics.DiscussionsFragment
 import com.example.myflickscreens.ui.topics.ReviewFragment
 import com.example.myflickscreens.utils.APIConstants
@@ -56,20 +55,28 @@ class HomeFragment : Fragment(), MovieCarouselAdapter.OnItemClickListener {
                 .addToBackStack(null)
                 .commit()
         }
+
+        binding.notificationIcon.setOnClickListener {
+            val intent = Intent(requireContext(), MainNotifications::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupCarousels() {
-        binding.carouselPopularMovies.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.carouselTopMovies.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.carouselPopularMovies.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.carouselTopMovies.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         binding.viewAllPopularMovies.setOnClickListener {
             openAllMoviesActivity("popular", "Filmes Populares")
         }
 
         binding.viewAllTopMovies.setOnClickListener {
-            openAllMoviesActivity("top_rated", "Top Filmes")
+            openAllMoviesActivity("top_rated", "Recomendações")
         }
     }
+
     private fun openAllMoviesActivity(movieType: String, title: String) {
         val intent = Intent(requireContext(), AllMoviesActivity::class.java).apply {
             putExtra(AllMoviesActivity.EXTRA_MOVIE_TYPE, movieType)
@@ -79,24 +86,23 @@ class HomeFragment : Fragment(), MovieCarouselAdapter.OnItemClickListener {
     }
 
     private fun fetchMovies() {
-        // Inicia as requisições para buscar filmes usando corrotinas
         lifecycleScope.launch {
             try {
                 val popularMovies = withContext(Dispatchers.IO) {
                     RetrofitInstance.api.getPopularMovies(APIConstants.API_KEY)
                 }
-                binding.carouselPopularMovies.adapter = MovieCarouselAdapter(popularMovies.results, this@HomeFragment)
+                binding.carouselPopularMovies.adapter =
+                    MovieCarouselAdapter(popularMovies.results, this@HomeFragment)
 
                 val topRatedMovies = withContext(Dispatchers.IO) {
                     RetrofitInstance.api.getTopRatedMovies(APIConstants.API_KEY)
                 }
-                binding.carouselTopMovies.adapter = MovieCarouselAdapter(topRatedMovies.results, this@HomeFragment)
+                binding.carouselTopMovies.adapter =
+                    MovieCarouselAdapter(topRatedMovies.results, this@HomeFragment)
 
-                // Adicione chamadas para os outros carrosséis da mesma forma
+
             } catch (e: HttpException) {
-                // Trate erros de HTTP
             } catch (e: Exception) {
-                // Trate outros erros
             }
         }
     }

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ui.settings.SettingsActivity">
+    tools:context="com.example.myflickscreens.ui.settings.SettingsActivity">
 
     <!-- Barra superior com botão de voltar -->
     <androidx.appcompat.widget.Toolbar
@@ -27,19 +27,17 @@
         android:layout_height="100dp"
         android:layout_marginTop="24dp"
         android:src="@drawable/baseline_profile_24"
+        android:contentDescription="Profile Image"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Texto para alterar imagem -->
-    <TextView
-        android:id="@+id/change_image_text"
+    <!-- Botão: Alterar Foto -->
+    <Button
+        android:id="@+id/btn_change_profile_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Alterar Imagem"
-        android:textSize="16sp"
-        android:textColor="?attr/colorPrimary"
-        android:layout_marginTop="8dp"
+        android:text="Alterar Foto"
         app:layout_constraintTop_toBottomOf="@id/profile_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -50,7 +48,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Alterar Dados da Conta"
-        app:layout_constraintTop_toBottomOf="@id/change_image_text"
+        app:layout_constraintTop_toBottomOf="@id/btn_change_profile_picture"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

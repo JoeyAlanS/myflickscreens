@@ -43,7 +43,6 @@ class MovieDataBaseUser : AppCompatActivity() {
             addToFirestore("favorites", movieTitle, moviePoster)
         }
 
-        // Salvar a nota dada pelo usuário
         ratingSlider.setOnRatingBarChangeListener { _, rating, _ ->
             saveRating(movieTitle, moviePoster, rating)
         }

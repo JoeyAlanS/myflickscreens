@@ -6,20 +6,20 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Título da Nova Discussão -->
-    <EditText
-        android:id="@+id/new_discussion_title"
+    <!-- Título da Discussão -->
+    <TextView
+        android:id="@+id/discussion_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Título da discussão"
-        android:inputType="text" />
+        android:text="Título da Discussão"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-    <!-- Texto da Nova Discussão -->
-    <EditText
-        android:id="@+id/new_discussion_text"
-        android:layout_width="match_parent"
+    <!-- Botão Entrar -->
+    <Button
+        android:id="@+id/enter_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Texto da discussão"
-        android:inputType="textMultiLine"
+        android:text="Entrar"
         android:layout_marginTop="8dp" />
 </LinearLayout>

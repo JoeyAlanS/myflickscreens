@@ -35,17 +35,16 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Configurar RecyclerView
         binding.recyclerViewMovies.layoutManager = LinearLayoutManager(requireContext())
-        movieAdapter = MovieCarouselAdapter(emptyList(), object : MovieCarouselAdapter.OnItemClickListener {
-            override fun onItemClick(movie: Movie) {
-                // Ação ao clicar em um filme (adicione sua lógica aqui)
-            }
-        })
+        movieAdapter =
+            MovieCarouselAdapter(emptyList(), object : MovieCarouselAdapter.OnItemClickListener {
+                override fun onItemClick(movie: Movie) {
+                }
+            })
         binding.recyclerViewMovies.adapter = movieAdapter
 
-        // Configurar SearchView
-        binding.searchViewMovies.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        binding.searchViewMovies.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
                     searchMovies(it)
@@ -54,7 +53,6 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Você pode implementar uma busca instantânea aqui, se desejado
                 return true
             }
         })
@@ -68,9 +66,9 @@ class SearchFragment : Fragment() {
                 }
                 movieAdapter.updateMovies(response.results)
             } catch (e: HttpException) {
-                // Tratar erro de rede
+
             } catch (e: Exception) {
-                // Tratar outros erros
+
             }
         }
     }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyFlickScreens</string>
+    <string name="default_web_client_id">640423095040-bu19l7e0he6076v3f91kpng1ck1srafu.apps.googleusercontent.com</string>
+
 </resources>

@@ -115,25 +115,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:id="@+id/btn_your_lists"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Suas listas"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground"
-                android:padding="8dp" />
+<!--            <TextView-->
+<!--                android:id="@+id/btn_your_lists"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Suas listas"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true"-->
+<!--                android:background="?attr/selectableItemBackground"-->
+<!--                android:padding="8dp" />-->
 
-            <TextView
-                android:id="@+id/btn_reviews"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reviews"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground"
-                android:padding="8dp" />
+<!--            <TextView-->
+<!--                android:id="@+id/btn_reviews"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Reviews"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="true"-->
+<!--                android:background="?attr/selectableItemBackground"-->
+<!--                android:padding="8dp" />-->
         </LinearLayout>
 
         <!-- Carrossel de Favoritos -->
