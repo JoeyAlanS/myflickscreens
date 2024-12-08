@@ -45,6 +45,8 @@ AllMoviesActivity: Exibe uma lista de filmes filtrados (popular, mais bem avalia
 🧑‍💻 Contribuidores
 Nome do autor: Joey Alan
 Contato: joeyalan50@gmail.com
+Nome: Marcus Vinicius
+Nome: João Isaias
 📜 Licença
 Este projeto está licenciado sob a MIT License.
 
