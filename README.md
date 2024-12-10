@@ -30,7 +30,7 @@ Bem-vindo ao **MyFlickScreens**, um aplicativo de avaliação de filmes e série
 
 ### Pré-requisitos
 
-- Android Studio (versão mínima: Arctic Fox)
+- Android Studio 
 - API Key do TMDb
 - Configuração do Firebase (arquivo `google-services.json`)
 
@@ -41,6 +41,7 @@ SearchFragment: Permite pesquisar títulos.
 UserProfileScreen: Gerencia o perfil do usuário, incluindo upload de imagem.
 SettingsActivity: Configurações, como alteração de dados de conta e logout.
 AllMoviesActivity: Exibe uma lista de filmes filtrados (popular, mais bem avaliados, em exibição).
+Documento do aplicativo: https://docs.google.com/document/d/1d8n2bDt-9Siz95G0q6QfccADsC7l1BhKY5CoBCRd5k4/edit?usp=sharing
 
 🧑‍💻 Contribuidores
 Nome do autor: Joey Alan
