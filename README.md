@@ -45,9 +45,8 @@ Documento do aplicativo: https://docs.google.com/document/d/1d8n2bDt-9Siz95G0q6Q
 
 🧑‍💻 Contribuidores
 Nome do autor: Joey Alan
-Contato: joeyalan50@gmail.com
-Nome: Marcus Vinicius
-Nome: João Isaias
+Contato: joeyalandev@gmail.com
+
 📜 Licença
 Este projeto está licenciado sob a MIT License.
 
